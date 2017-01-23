@@ -36,7 +36,7 @@ as for example in the video below:
 
 [![real-robot](/misc/real-robot.png)](https://www.youtube.com/watch?v=rITQlGuXXOw)
 
-[Object detection and location retrieval are **already available**](./src/main.cpp#L182), so you need to fill in the missing gaps in the code (highlighted by the comment `// FILL IN THE CODE`) regarding each of the remaining points illustrated above.
+Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/main.cpp#L182)), so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE`.
 
 :warning: Don't speed up the movements by increasing the trajectory time of the operational controllers: they're already all set to work with the real robot.
 
