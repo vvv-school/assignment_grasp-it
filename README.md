@@ -38,6 +38,8 @@ as for example in the video below:
 
 [Object detection and location retrieval are **already available**](./src/main.cpp#L182), so you need to fill in the missing gaps in the code (highlighted by the comment `// FILL IN THE CODE`) regarding each of the remaining points illustrated above.
 
+:warning: Don't speed up the movements by increasing the trajectory time of the operational controllers: they're already all set to work with the real robot.
+
 Once done, you can test your code in two ways along with the simulator:
 
 1. **Manually**: running the _yarpmanager scripts_ provided from within [**app/scripts**](./app/scripts) and yielding corresponding commands to the _module rpc port_.
