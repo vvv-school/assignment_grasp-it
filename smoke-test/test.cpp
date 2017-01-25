@@ -103,9 +103,7 @@ public:
 
         RTF_TEST_REPORT(Asserter::format("Set rpc timeout = %g [s]",rpcTmo));
         portBall.asPort().setTimeout(rpcTmo);
-        portGI.asPort().setTimeout(rpcTmo);
-        
-        Time::delay(5.0);
+        portGI.asPort().setTimeout(rpcTmo);        
 
         RTF_TEST_REPORT("Connecting Ports");
         RTF_ASSERT_ERROR_IF(Network::connect(portBallName,"/icubSim/world"),
@@ -161,6 +159,8 @@ public:
     /******************************************************************/
     virtual void run()
     {
+        Time::delay(5.0);
+        
         RTF_TEST_REPORT("Retrieving initial ball position");
         Vector initialBallPos=getBallPosition();
         RTF_TEST_REPORT(Asserter::format("initial ball position = (%s) [m]",
