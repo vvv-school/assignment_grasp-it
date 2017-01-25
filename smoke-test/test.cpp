@@ -41,12 +41,12 @@ class TestAssignmentGraspIt : public YarpTestCase,
         cmd.addString("ball");
         RTF_ASSERT_ERROR_IF(portBall.write(cmd,reply),"Unable to talk to world");
         RTF_ASSERT_ERROR_IF(reply.size()>=3,"Invalid reply from world");
-        
+
         Vector pos(3);
         pos[0]=reply.get(0).asDouble();
         pos[1]=reply.get(1).asDouble();
         pos[2]=reply.get(2).asDouble();
-        
+
         return pos;
     }
 
@@ -81,13 +81,13 @@ public:
     virtual ~TestAssignmentGraspIt()
     {
     }
-    
+
     /******************************************************************/
     virtual bool setup(yarp::os::Property& property)
     {
         string robot=property.check("robot",Value("icubSim")).asString();
-        float rpcTmo=(float)property.check("rpc-timeout",Value(120.0)).asDouble();
-        
+        float rpcTmo=(float)property.check("rpc-timeout",Value(240.0)).asDouble();
+
         string robotPortRName("/"+robot+"/cartesianController/right_arm/state:o");
         string robotPortLName("/"+robot+"/cartesianController/left_arm/state:o");
 
@@ -104,7 +104,7 @@ public:
         RTF_TEST_REPORT(Asserter::format("Set rpc timeout = %g [s]",rpcTmo));
         portBall.asPort().setTimeout(rpcTmo);
         portGI.asPort().setTimeout(rpcTmo);
-        
+
         RTF_TEST_REPORT("Connecting Ports");
         RTF_ASSERT_ERROR_IF(Network::connect(portBallName,"/icubSim/world"),
                             "Unable to connect to /icubSim/world");
@@ -116,9 +116,9 @@ public:
         RTF_ASSERT_ERROR_IF(Network::connect(robotPortLName,portHandLName),
                             Asserter::format("Unable to connect to %s",
                                              robotPortLName.c_str()));
-                
+
         Rand::init();
-        
+
         return true;
     }
 
@@ -131,30 +131,30 @@ public:
         portHandL.close();
         portHandR.close();
     }
-    
+
     /******************************************************************/
     virtual bool read(ConnectionReader& reader)
     {
         if (!hit)
         {
             Bottle data;
-            data.read(reader); 
-   
+            data.read(reader);
+
             Vector x(3);
             x[0]=data.get(0).asDouble();
             x[1]=data.get(1).asDouble();
             x[2]=data.get(2).asDouble();
 
             double d=norm(ballPosRobFrame-x);
-            if (d<0.07)
+            if (d<0.15)
             {
                 RTF_TEST_REPORT(Asserter::format("Great! We're at %g [m] from the ball",d));
                 hit=true;
             }
         }
-        
+
         return true;
-    }    
+    }
 
     /******************************************************************/
     virtual void run()
@@ -165,18 +165,18 @@ public:
         Vector initialBallPos=getBallPosition();
         RTF_TEST_REPORT(Asserter::format("initial ball position = (%s) [m]",
                                          initialBallPos.toString(3,3).c_str()));
-         
+
         Vector min(3,0.0),max(3,0.0);
         min[0]= 0.0;  max[0]=0.4;   // x-axis
         min[1]= 0.0;  max[1]=0.0;   // y-axis
         min[2]=-0.02; max[2]=0.02;  // z-axis
-        
+
         RTF_TEST_REPORT("Setting new initial ball position");
         initialBallPos+=Rand::vector(min,max);
         setBallPosition(initialBallPos);
         RTF_TEST_REPORT(Asserter::format("new ball position = (%s) [m]",
-                                         initialBallPos.toString(3,3).c_str()));        
-        
+                                         initialBallPos.toString(3,3).c_str()));
+
         // compute ball position in robot's root frame
         Matrix T=zeros(4,4);
         T(0,1)=-1.0;
@@ -193,16 +193,16 @@ public:
         RTF_ASSERT_ERROR_IF(portGI.write(cmd,reply),"Unable to talk to GI");
         RTF_ASSERT_ERROR_IF(reply.get(0).asString()=="ack","Unable to look_down");
         cmd.clear(); reply.clear();
-        
+
         RTF_TEST_REPORT("Proximity check is now active");
         portHandR.setReader(*this);
         portHandL.setReader(*this);
-        
+
         cmd.addString("grasp_it");
         RTF_ASSERT_ERROR_IF(portGI.write(cmd,reply),"Unable to talk to GI");
         RTF_ASSERT_ERROR_IF(reply.get(0).asString()=="ack","Unable to grasp_it");
         cmd.clear(); reply.clear();
-        
+
         RTF_TEST_REPORT("Retrieving final ball position");
         Vector finalBallPos=getBallPosition();
         RTF_TEST_REPORT(Asserter::format("final ball position = (%s) [m]",
