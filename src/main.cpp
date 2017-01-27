@@ -78,12 +78,11 @@ protected:
         // FILL IN THE CODE
 
         // reach the first via-point
-        // located 10 cm above the target x
+        // located 5 cm above the target x
 
         // FILL IN THE CODE
 
         // reach the final target x;
-        // well not really x, but a point 5 cm above
 
         // FILL IN THE CODE
     }
@@ -170,9 +169,16 @@ protected:
     /***************************************************/
     void look_down()
     {
-        // this is a fairly easy job, isn't it?
-
-        // FILL IN THE CODE
+        // we ask the controller to keep the vergence
+        // from now on fixed at 5.0 deg, which is the
+        // configuration where we calibrated the stereo-vision;
+        // without that, we cannot retrieve good 3D positions
+        // with the real robot
+        igaze->blockEyes(5.0);
+        Vector ang(3,0.0);
+        ang[1]=-60.0;
+        igaze->lookAtAbsAngles(ang);
+        igaze->waitMotionDone();
     }
 
     /***************************************************/
@@ -351,7 +357,7 @@ public:
             // close the fingers around the object:
             // if closure == 0.0, the finger joints have to reach their minimum
             // if closure == 1.0, the finger joints have to reach their maximum
-            double fingers_closure=0.2; // default value
+            double fingers_closure=0.5; // default value
 
             // we can pass a new value via rpc
             if (command.size()>1)
@@ -391,7 +397,7 @@ public:
 
 
 /***************************************************/
-int main()
+int main(int argc, char *argv[])
 {
     Network yarp;
     if (!yarp.checkNetwork())
@@ -402,5 +408,7 @@ int main()
 
     CtrlModule mod;
     ResourceFinder rf;
+    rf.configure(argc,argv);
     return mod.runModule(rf);
 }
+

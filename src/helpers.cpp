@@ -98,6 +98,7 @@ bool ObjectRetriever::getLocation(Vector &location,
                     location.push_back(1.0);
                     location=SE3inv(T)*location;
                     location.pop_back();
+                    location[2]+=0.05;  // safe margin
                     return true;
                 }
             }
