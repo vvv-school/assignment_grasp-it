@@ -109,15 +109,18 @@ protected:
     {
         // select the correct interface
         IControlLimits2   *ilim;
+        IControlMode2     *imod;
         IPositionControl2 *ipos;
         if (hand=="right")
         {
             drvHandR.view(ilim);
+            drvHandR.view(imod);
             drvHandR.view(ipos);
         }
         else
         {
             drvHandL.view(ilim);
+            drvHandL.view(imod);
             drvHandL.view(ipos);
         }
 
