@@ -40,8 +40,8 @@ class TestAssignmentGraspIt : public yarp::rtf::TestCase,
         cmd.addString("world");
         cmd.addString("get");
         cmd.addString("ball");
-        RTF_ASSERT_ERROR_IF(portBall.write(cmd,reply),"Unable to talk to world");
-        RTF_ASSERT_ERROR_IF(reply.size()>=3,"Invalid reply from world");
+        RTF_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
+        RTF_ASSERT_ERROR_IF_FALSE(reply.size()>=3,"Invalid reply from world");
 
         Vector pos(3);
         pos[0]=reply.get(0).asDouble();
@@ -63,7 +63,7 @@ class TestAssignmentGraspIt : public yarp::rtf::TestCase,
             cmd.addDouble(pos[0]);
             cmd.addDouble(pos[1]);
             cmd.addDouble(pos[2]);
-            RTF_ASSERT_ERROR_IF(portBall.write(cmd,reply),"Unable to talk to world");
+            RTF_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
             return true;
         }
         else
@@ -109,16 +109,16 @@ public:
         Time::delay(5.0);
 
         RTF_TEST_REPORT("Connecting Ports");
-        RTF_ASSERT_ERROR_IF(Network::connect(portBallName,"/icubSim/world"),
-                            "Unable to connect to /icubSim/world");
-        RTF_ASSERT_ERROR_IF(Network::connect(portGIName,"/service"),
-                            "Unable to connect to /service");
-        RTF_ASSERT_ERROR_IF(Network::connect(robotPortRName,portHandRName),
-                            Asserter::format("Unable to connect to %s",
-                                             robotPortRName.c_str()));
-        RTF_ASSERT_ERROR_IF(Network::connect(robotPortLName,portHandLName),
-                            Asserter::format("Unable to connect to %s",
-                                             robotPortLName.c_str()));
+        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(portBallName,"/icubSim/world"),
+                                  "Unable to connect to /icubSim/world");
+        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(portGIName,"/service"),
+                                  "Unable to connect to /service");
+        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortRName,portHandRName),
+                                  Asserter::format("Unable to connect to %s",
+                                                   robotPortRName.c_str()));
+        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortLName,portHandLName),
+                                  Asserter::format("Unable to connect to %s",
+                                                   robotPortLName.c_str()));
 
         Rand::init();
 
@@ -193,8 +193,8 @@ public:
 
         Bottle cmd,reply;
         cmd.addString("look_down");
-        RTF_ASSERT_ERROR_IF(portGI.write(cmd,reply),"Unable to talk to GI");
-        RTF_ASSERT_ERROR_IF(reply.get(0).asString()=="ack","Unable to look_down");
+        RTF_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
+        RTF_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to look_down");
         cmd.clear(); reply.clear();
 
         RTF_TEST_REPORT("Proximity check is now active");
@@ -202,8 +202,8 @@ public:
         portHandL.setReader(*this);
 
         cmd.addString("grasp_it");
-        RTF_ASSERT_ERROR_IF(portGI.write(cmd,reply),"Unable to talk to GI");
-        RTF_ASSERT_ERROR_IF(reply.get(0).asString()=="ack","Unable to grasp_it");
+        RTF_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
+        RTF_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to grasp_it");
         cmd.clear(); reply.clear();
 
         RTF_TEST_REPORT("Retrieving final ball position");
