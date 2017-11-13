@@ -38,7 +38,7 @@ as for example in the video below:
 
 Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/helpers.h#L22)), so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE`.
 
-:warning: Don't speed up the movements by increasing the trajectory time of the operational controllers: they're already all set to work with the real robot.
+:warning: Don't speed up the movements by decreasing the trajectory time of the operational controllers: they're already all set to work with the real robot.
 
 Once done, you can test your code in two ways along with the simulator:
 
