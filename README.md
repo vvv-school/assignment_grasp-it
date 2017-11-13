@@ -48,7 +48,7 @@ Once done, you can test your code in two ways along with the simulator:
     1. When you reply to rpc commands, we assume the robot has **finished the movement** (e.g. see [_this line_](./src/main.cpp#L361) in the `respond` method).
     1. The smoke-test will add a random displacement to the initial position of the ball in order to force the use of both hands :wink:
 
-If you pass the test on the simulator, **book the robot** to get a real experience!
+If you pass the test on the simulator, :clock3: **book the robot** :robot: to get a real experience!
 
 ## Notes
 - To make the blue ball show up within the simulator, you have to turn on the
