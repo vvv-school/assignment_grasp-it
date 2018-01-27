@@ -21,9 +21,8 @@ and the `Gaze Interface` to accomplish the following tasks:
 1. Ask iCub to **grasp the object**.
 1. **Lift the object**.
 
-This assignment is peculiar in such a way that **we can interface the simulator
-and the real robot indifferently**, being the code capable of dealing with object
-location retrieval in both conditions, transparently to the user.
+This assignment is peculiar in that **we can interface the simulator and the real robot indifferently**,
+being the code capable of dealing with object location retrieval in both conditions, transparently to the user.
 
 The outcome should look like the animation below with the simulator:
 
