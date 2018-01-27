@@ -3,6 +3,7 @@
 // Author: Ugo Pattacini - <ugo.pattacini@iit.it>
 
 #include <yarp/os/Vocab.h>
+#include <yarp/os/Bottle.h>
 #include <yarp/os/LogStream.h>
 #include <yarp/sig/Matrix.h>
 #include <yarp/math/Math.h>
