@@ -161,7 +161,7 @@ protected:
             home_x[1]=-0.3;
         }
 
-        igaze->lookAtAbsAngles(Vector(3,0.0));
+        igaze->lookAtAbsAnglesSync(Vector(3,0.0));
         iarm->goToPositionSync(home_x);
 
         iarm->waitMotionDone();
@@ -180,7 +180,7 @@ protected:
         igaze->blockEyes(5.0);
         Vector ang(3,0.0);
         ang[1]=-60.0;
-        igaze->lookAtAbsAngles(ang);
+        igaze->lookAtAbsAnglesSync(ang);
         igaze->waitMotionDone();
     }
 
