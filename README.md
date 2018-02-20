@@ -35,7 +35,7 @@ as for example in the video below:
 
 [![real-robot](/misc/real-robot.png)](https://www.youtube.com/watch?v=rITQlGuXXOw)
 
-Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/helpers.h#L22)), so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE` in the [**`main.cpp`**](./src/main.cpp) module.
+Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/helpers.h#L22)), so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE` in the [**`src/main.cpp`**](./src/main.cpp) module.
 
 :warning: Don't speed up the movements by reducing the trajectory time of the operational controllers: they're already all set to work with the real robot.
 
