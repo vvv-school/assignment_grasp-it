@@ -108,9 +108,9 @@ protected:
                      const double fingers_closure)
     {
         // select the correct interface
-        IControlLimits2   *ilim;
-        IControlMode2     *imod;
-        IPositionControl2 *ipos;
+        IControlLimits   *ilim;
+        IControlMode     *imod;
+        IPositionControl *ipos;
         if (hand=="right")
         {
             drvHandR.view(ilim);
@@ -414,4 +414,3 @@ int main(int argc, char *argv[])
     rf.configure(argc,argv);
     return mod.runModule(rf);
 }
-
