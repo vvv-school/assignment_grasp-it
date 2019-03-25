@@ -6,23 +6,23 @@
 
 #include <string>
 
-#include <rtf/dll/Plugin.h>
-#include <rtf/TestAssert.h>
+#include <robottestingframework/dll/Plugin.h>
+#include <robottestingframework/TestAssert.h>
 
-#include <yarp/rtf/TestCase.h>
+#include <yarp/robottestingframework/TestCase.h>
 #include <yarp/os/all.h>
 #include <yarp/sig/all.h>
 #include <yarp/math/Math.h>
 #include <yarp/math/Rand.h>
 
 using namespace std;
-using namespace RTF;
+using namespace robottestingframework;
 using namespace yarp::os;
 using namespace yarp::sig;
 using namespace yarp::math;
 
 /**********************************************************************/
-class TestAssignmentGraspIt : public yarp::rtf::TestCase,
+class TestAssignmentGraspIt : public yarp::robottestingframework::TestCase,
                               public PortReader
 {
     RpcClient portBall;
@@ -40,8 +40,8 @@ class TestAssignmentGraspIt : public yarp::rtf::TestCase,
         cmd.addString("world");
         cmd.addString("get");
         cmd.addString("ball");
-        RTF_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
-        RTF_ASSERT_ERROR_IF_FALSE(reply.size()>=3,"Invalid reply from world");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.size()>=3,"Invalid reply from world");
 
         Vector pos(3);
         pos[0]=reply.get(0).asDouble();
@@ -63,7 +63,7 @@ class TestAssignmentGraspIt : public yarp::rtf::TestCase,
             cmd.addDouble(pos[0]);
             cmd.addDouble(pos[1]);
             cmd.addDouble(pos[2]);
-            RTF_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
+            ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
             return true;
         }
         else
@@ -73,7 +73,7 @@ class TestAssignmentGraspIt : public yarp::rtf::TestCase,
 public:
     /******************************************************************/
     TestAssignmentGraspIt() :
-        yarp::rtf::TestCase("TestAssignmentGraspIt"),
+        yarp::robottestingframework::TestCase("TestAssignmentGraspIt"),
         hit(false)
     {
     }
@@ -102,21 +102,21 @@ public:
         portHandR.open(portHandRName);
         portHandL.open(portHandLName);
 
-        RTF_TEST_REPORT(Asserter::format("Set rpc timeout = %g [s]",rpcTmo));
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("Set rpc timeout = %g [s]",rpcTmo));
         portBall.asPort().setTimeout(rpcTmo);
         portGI.asPort().setTimeout(rpcTmo);
 
         Time::delay(5.0);
 
-        RTF_TEST_REPORT("Connecting Ports");
-        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(portBallName,"/icubSim/world"),
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Connecting Ports");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(portBallName,"/icubSim/world"),
                                   "Unable to connect to /icubSim/world");
-        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(portGIName,"/service"),
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(portGIName,"/service"),
                                   "Unable to connect to /service");
-        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortRName,portHandRName),
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortRName,portHandRName),
                                   Asserter::format("Unable to connect to %s",
                                                    robotPortRName.c_str()));
-        RTF_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortLName,portHandLName),
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortLName,portHandLName),
                                   Asserter::format("Unable to connect to %s",
                                                    robotPortLName.c_str()));
 
@@ -128,7 +128,7 @@ public:
     /******************************************************************/
     virtual void tearDown()
     {
-        RTF_TEST_REPORT("Closing Ports");
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Closing Ports");
         portBall.close();
         portGI.close();
         portHandL.close();
@@ -151,7 +151,7 @@ public:
             double d=norm(ballPosRobFrame-x);
             if (d<0.15)
             {
-                RTF_TEST_REPORT(Asserter::format("Great! We're at %g [m] from the ball",d));
+                ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("Great! We're at %g [m] from the ball",d));
                 hit=true;
             }
         }
@@ -164,9 +164,9 @@ public:
     {
         Time::delay(5.0);
 
-        RTF_TEST_REPORT("Retrieving initial ball position");
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Retrieving initial ball position");
         Vector initialBallPos=getBallPosition();
-        RTF_TEST_REPORT(Asserter::format("initial ball position = (%s) [m]",
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("initial ball position = (%s) [m]",
                                          initialBallPos.toString(3,3).c_str()));
 
         Vector min(3,0.0),max(3,0.0);
@@ -174,10 +174,10 @@ public:
         min[1]= 0.0;  max[1]=0.0;   // y-axis
         min[2]=-0.02; max[2]=0.02;  // z-axis
 
-        RTF_TEST_REPORT("Setting new initial ball position");
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Setting new initial ball position");
         initialBallPos+=Rand::vector(min,max);
         setBallPosition(initialBallPos);
-        RTF_TEST_REPORT(Asserter::format("new ball position = (%s) [m]",
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("new ball position = (%s) [m]",
                                          initialBallPos.toString(3,3).c_str()));
 
         // compute ball position in robot's root frame
@@ -193,28 +193,28 @@ public:
 
         Bottle cmd,reply;
         cmd.addString("look_down");
-        RTF_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
-        RTF_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to look_down");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to look_down");
         cmd.clear(); reply.clear();
 
-        RTF_TEST_REPORT("Proximity check is now active");
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Proximity check is now active");
         portHandR.setReader(*this);
         portHandL.setReader(*this);
 
         cmd.addString("grasp_it");
-        RTF_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
-        RTF_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to grasp_it");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
+        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to grasp_it");
         cmd.clear(); reply.clear();
 
-        RTF_TEST_REPORT("Retrieving final ball position");
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT("Retrieving final ball position");
         Vector finalBallPos=getBallPosition();
-        RTF_TEST_REPORT(Asserter::format("final ball position = (%s) [m]",
+        ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("final ball position = (%s) [m]",
                                          finalBallPos.toString(3,3).c_str()));
 
         double d=norm(finalBallPos-initialBallPos);
-        RTF_TEST_CHECK(hit,"We grasped the ball!");
-        RTF_TEST_CHECK(d>0.01,Asserter::format("Ball has moved for at least %g [m]!",d));
+        ROBOTTESTINGFRAMEWORK_TEST_CHECK(hit,"We grasped the ball!");
+        ROBOTTESTINGFRAMEWORK_TEST_CHECK(d>0.01,Asserter::format("Ball has moved for at least %g [m]!",d));
     }
 };
 
-PREPARE_PLUGIN(TestAssignmentGraspIt)
+ROBOTTESTINGFRAMEWORK_PREPARE_PLUGIN(TestAssignmentGraspIt)
