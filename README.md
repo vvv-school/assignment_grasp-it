@@ -5,9 +5,9 @@ Operational Control with iCub
 
 # Prerequisites
 By now, you should be an expert of the following components :wink::
-- [Joint Control](http://wiki.icub.org/iCub/main/dox/html/icub_motor_control_tutorial.html).
-- [Cartesian Control](http://wiki.icub.org/iCub/main/dox/html/icub_cartesian_interface.html).
-- [Gaze Control](http://wiki.icub.org/iCub/main/dox/html/icub_gaze_interface.html).
+- [Joint Control](http://www.icub.org/doc/icub-main/icub_motor_control_tutorial.html).
+- [Cartesian Control](http://www.icub.org/doc/icub-main/icub_cartesian_interface.html).
+- [Gaze Control](http://www.icub.org/doc/icub-main/icub_gaze_interface.html).
 
 # Assignment
 We want you to develop a module that employs the `Joint Interface`, the `Cartesian Interface`
