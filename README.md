@@ -58,7 +58,7 @@ Once done, you can test your code in two ways along with the simulator:
 If you pass the test on the simulator, :clock3: **book the robot** :robot: to get a real experience!
 
 <details>
-<summary>Click to know how to make the blue ball show up in the simulator</summary>
+<summary>🔵 Click to know how to make the blue ball show up in the simulator</summary>
     
 - To make the blue ball show up within the simulator, you have to turn on the
 flag **RENDER::objects** in the [**`iCub_parts_activation.ini`**](https://github.com/robotology/icub-main/blob/master/app/simConfig/conf/iCub_parts_activation.ini#L28) file.
