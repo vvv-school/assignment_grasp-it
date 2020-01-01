@@ -32,12 +32,14 @@ The outcome should look like the animation below with the simulator:
 
 <details>
 <summary>Click to watch a better grasp 👌</summary>
+
 Well, it comes out that grasping a rigid sphere in a simulated environment
 is not that easy :blush: since dynamics rules here.
 Anyway, the same code running on the real robot should perform way better,
 as for example in the video below:
 
 [![real-robot](/assets/real-robot.png)](https://www.youtube.com/watch?v=rITQlGuXXOw)
+
 </details>
 
 ---
@@ -55,6 +57,9 @@ Once done, you can test your code in two ways along with the simulator:
 
 If you pass the test on the simulator, :clock3: **book the robot** :robot: to get a real experience!
 
+<details>
+<summary>Click to know how to make the blue ball show up in the simulator</summary>
+    
 ## Notes
 - To make the blue ball show up within the simulator, you have to turn on the
 flag **RENDER::objects** in the [**`iCub_parts_activation.ini`**](https://github.com/robotology/icub-main/blob/master/app/simConfig/conf/iCub_parts_activation.ini#L28) file.
@@ -71,5 +76,7 @@ flag **RENDER::objects** in the [**`iCub_parts_activation.ini`**](https://github
 
     Also, you might find this [**resource**](https://github.com/robotology/QA/issues/42) quite useful to get accustomed to configuration files in Yarp :smiley:
 - Alternatively, you can use this [**model**](https://github.com/robotology-playground/icub-gazebo-wholebody/tree/master/worlds/iCub_and_Table) within **Gazebo**. Be careful, the **smoke-test** does work only with iCub_SIM.
+
+</details>
 
 # [How to complete the assignment](https://github.com/vvv-school/vvv-school.github.io/blob/master/instructions/how-to-complete-assignments.md)
