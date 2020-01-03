@@ -2,12 +2,14 @@
 //
 // Author: Ugo Pattacini - <ugo.pattacini@iit.it>
 
+#ifndef HELPERS_H
+#define HELPERS_H
+
 #include <string>
 #include <yarp/os/PortReport.h>
 #include <yarp/os/PortInfo.h>
 #include <yarp/os/RpcClient.h>
 #include <yarp/sig/Vector.h>
-
 
 class ObjectRetriever : yarp::os::PortReport
 {
@@ -22,3 +24,5 @@ public:
     bool getLocation(yarp::sig::Vector &location, const std::string &hand="dummy");
     virtual ~ObjectRetriever();
 };
+
+#endif
