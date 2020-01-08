@@ -40,8 +40,10 @@ class TestAssignmentGraspIt : public yarp::robottestingframework::TestCase,
         cmd.addString("world");
         cmd.addString("get");
         cmd.addString("ball");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.size()>=3,"Invalid reply from world");
+        if (!portBall.write(cmd,reply))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to world");
+        if (reply.size()<3)
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Invalid reply from world");
 
         Vector pos(3);
         pos[0]=reply.get(0).asDouble();
@@ -63,7 +65,8 @@ class TestAssignmentGraspIt : public yarp::robottestingframework::TestCase,
             cmd.addDouble(pos[0]);
             cmd.addDouble(pos[1]);
             cmd.addDouble(pos[2]);
-            ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portBall.write(cmd,reply),"Unable to talk to world");
+            if (!portBall.write(cmd,reply))
+                ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to world");
             return true;
         }
         else
@@ -109,16 +112,18 @@ public:
         Time::delay(5.0);
 
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Connecting Ports");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(portBallName,"/icubSim/world"),
-                                  "Unable to connect to /icubSim/world");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(portGIName,"/service"),
-                                  "Unable to connect to /service");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortRName,portHandRName),
-                                  Asserter::format("Unable to connect to %s",
-                                                   robotPortRName.c_str()));
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(Network::connect(robotPortLName,portHandLName),
-                                  Asserter::format("Unable to connect to %s",
-                                                   robotPortLName.c_str()));
+
+        if (!Network::connect(portBallName,"/icubSim/world"))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to connect to /icubSim/world");
+
+        if (!Network::connect(portGIName,"/service"))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to connect to /service");
+
+        if (!Network::connect(robotPortRName,portHandRName))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL(Asserter::format("Unable to connect to %s",robotPortRName.c_str()));
+
+        if (!Network::connect(robotPortLName,portHandLName))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL(Asserter::format("Unable to connect to %s",robotPortLName.c_str()));
 
         Rand::init();
 
@@ -193,8 +198,10 @@ public:
 
         Bottle cmd,reply;
         cmd.addString("look_down");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to look_down");
+        if (!portGI.write(cmd,reply))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to GI");
+        if (reply.get(0).asString()!="ack")
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to look_down");
         cmd.clear(); reply.clear();
 
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Proximity check is now active");
@@ -202,8 +209,10 @@ public:
         portHandL.setReader(*this);
 
         cmd.addString("grasp_it");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(portGI.write(cmd,reply),"Unable to talk to GI");
-        ROBOTTESTINGFRAMEWORK_ASSERT_ERROR_IF_FALSE(reply.get(0).asString()=="ack","Unable to grasp_it");
+        if (!portGI.write(cmd,reply))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to GI");
+        if (reply.get(0).asString()!="ack")
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to grasp_it");
         cmd.clear(); reply.clear();
 
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Retrieving final ball position");
