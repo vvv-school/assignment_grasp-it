@@ -37,18 +37,16 @@ class TestAssignmentGraspIt : public yarp::robottestingframework::TestCase,
     Vector getBallPosition()
     {
         Bottle cmd,reply;
-        cmd.addString("world");
-        cmd.addString("get");
-        cmd.addString("ball");
+        cmd.addVocab(Vocab::encode("get"));
         if (!portBall.write(cmd,reply))
             ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to world");
-        if (reply.size()<3)
+        if ((reply.get(0).asVocab()!=Vocab::encode("ack")) || (reply.size()<4))
             ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Invalid reply from world");
 
         Vector pos(3);
-        pos[0]=reply.get(0).asDouble();
-        pos[1]=reply.get(1).asDouble();
-        pos[2]=reply.get(2).asDouble();
+        pos[0]=reply.get(1).asDouble();
+        pos[1]=reply.get(2).asDouble();
+        pos[2]=reply.get(3).asDouble();
 
         return pos;
     }
@@ -59,14 +57,14 @@ class TestAssignmentGraspIt : public yarp::robottestingframework::TestCase,
         if (pos.length()>=3)
         {
             Bottle cmd,reply;
-            cmd.addString("world");
-            cmd.addString("set");
-            cmd.addString("ball");
+            cmd.addVocab(Vocab::encode("set"));
             cmd.addDouble(pos[0]);
             cmd.addDouble(pos[1]);
             cmd.addDouble(pos[2]);
             if (!portBall.write(cmd,reply))
                 ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to talk to world");
+            if (reply.get(0).asVocab()!=Vocab::encode("ack"))
+                ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Invalid reply from world");
             return true;
         }
         else
@@ -113,8 +111,8 @@ public:
 
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Connecting Ports");
 
-        if (!Network::connect(portBallName,"/icubSim/world"))
-            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to connect to /icubSim/world");
+        if (!Network::connect(portBallName,"/assignment_grasp-it-ball/rpc"))
+            ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to connect to /assignment_grasp-it-ball/rpc");
 
         if (!Network::connect(portGIName,"/service"))
             ROBOTTESTINGFRAMEWORK_ASSERT_FAIL("Unable to connect to /service");
@@ -154,7 +152,7 @@ public:
             x[2]=data.get(2).asDouble();
 
             double d=norm(ballPosRobFrame-x);
-            if (d<0.15)
+            if (d<0.1)
             {
                 ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("Great! We're at %g [m] from the ball",d));
                 hit=true;
@@ -175,9 +173,9 @@ public:
                                          initialBallPos.toString(3,3).c_str()));
 
         Vector min(3,0.0),max(3,0.0);
-        min[0]= 0.0;  max[0]=0.4;   // x-axis
-        min[1]= 0.0;  max[1]=0.0;   // y-axis
-        min[2]=-0.02; max[2]=0.02;  // z-axis
+        min[0]=-0.02; max[0]=0.0;   // x-axis
+        min[1]=-0.05; max[1]=0.05;  // y-axis
+        min[2]=0.0;   max[2]=0.0;   // z-axis
 
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Setting new initial ball position");
         initialBallPos+=Rand::vector(min,max);
@@ -186,15 +184,8 @@ public:
                                          initialBallPos.toString(3,3).c_str()));
 
         // compute ball position in robot's root frame
-        Matrix T=zeros(4,4);
-        T(0,1)=-1.0;
-        T(1,2)=1.0;  T(1,3)=0.5976;
-        T(2,0)=-1.0; T(2,3)=-0.026;
-        T(3,3)=1.0;
-        Vector initBallPosHomog=initialBallPos;
-        initBallPosHomog.push_back(1.0);
-        ballPosRobFrame=SE3inv(T)*initBallPosHomog;
-        ballPosRobFrame.pop_back();
+        ballPosRobFrame=initialBallPos;
+        ballPosRobFrame[2]-=0.63;
 
         Bottle cmd,reply;
         cmd.addString("look_down");
@@ -218,11 +209,11 @@ public:
         ROBOTTESTINGFRAMEWORK_TEST_REPORT("Retrieving final ball position");
         Vector finalBallPos=getBallPosition();
         ROBOTTESTINGFRAMEWORK_TEST_REPORT(Asserter::format("final ball position = (%s) [m]",
-                                         finalBallPos.toString(3,3).c_str()));
+                                          finalBallPos.toString(3,3).c_str()));
 
-        double d=norm(finalBallPos-initialBallPos);
-        ROBOTTESTINGFRAMEWORK_TEST_CHECK(hit,"We grasped the ball!");
-        ROBOTTESTINGFRAMEWORK_TEST_CHECK(d>0.01,Asserter::format("Ball has moved for at least %g [m]!",d));
+        double d=finalBallPos[2]-initialBallPos[2];
+        ROBOTTESTINGFRAMEWORK_TEST_CHECK(hit,"We've approached the ball!");
+        ROBOTTESTINGFRAMEWORK_TEST_CHECK(d>=0.02,Asserter::format("Ball has been lifted for at least %g [m]!",d));
     }
 };
 

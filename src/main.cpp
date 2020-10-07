@@ -143,33 +143,6 @@ protected:
     }
 
     /***************************************************/
-    void home(const string &hand)
-    {
-        Vector home_x(3);
-        home_x[0]=-0.2;
-        home_x[2]=0.08;
-
-        // select the correct interface
-        if (hand=="right")
-        {
-            drvArmR.view(iarm);
-            home_x[1]=0.3;
-        }
-        else
-        {
-            drvArmL.view(iarm);
-            home_x[1]=-0.3;
-        }
-
-        igaze->lookAtAbsAnglesSync(Vector(3,0.0));
-        iarm->goToPositionSync(home_x);
-
-        iarm->waitMotionDone();
-        igaze->waitMotionDone();
-        igaze->setTrackingMode(false);
-    }
-
-    /***************************************************/
     void look_down()
     {
         // we ask the controller to keep the vergence
@@ -232,12 +205,6 @@ protected:
 
             liftObject(hand);
             yInfo()<<"lifted";
-
-            moveFingers(hand,fingers,0.0);
-            yInfo()<<"released";
-
-            home(hand);
-            yInfo()<<"gone home";
             return true;
         }
         return false;
@@ -360,7 +327,7 @@ public:
             // close the fingers around the object:
             // if closure == 0.0, the finger joints have to reach their minimum
             // if closure == 1.0, the finger joints have to reach their maximum
-            double fingers_closure=0.5; // default value
+            double fingers_closure=0.0; // default value
 
             // we can pass a new value via rpc
             if (command.size()>1)

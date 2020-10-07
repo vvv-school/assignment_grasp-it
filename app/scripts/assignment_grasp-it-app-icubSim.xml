@@ -18,7 +18,7 @@
 
   <connection>
       <from>/location</from>
-      <to>/icubSim/world</to>
+      <to>/assignment_grasp-it-ball/rpc</to>
       <protocol>tcp</protocol>
   </connection>
 

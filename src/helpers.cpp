@@ -39,7 +39,7 @@ void ObjectRetriever::report(const PortInfo &info)
 {
     if (info.created && !info.incoming)
     {
-        simulation=(info.targetName=="/icubSim/world");
+        simulation=(info.targetName=="/assignment_grasp-it-ball/rpc");
         yInfo()<<"We are talking to "<<(simulation?"icubSim":"icub");
     }
 }
@@ -78,29 +78,25 @@ bool ObjectRetriever::getLocation(Vector &location,
         Bottle cmd,reply;
         if (simulation)
         {
-            cmd.addString("world");
             cmd.addString("get");
-            cmd.addString("ball");
             if (portLocation.write(cmd,reply))
             {
-                if (reply.size()>=3)
+                if (reply.size()>=4)
                 {
-                    location.resize(3);
-                    location[0]=reply.get(0).asDouble();
-                    location[1]=reply.get(1).asDouble();
-                    location[2]=reply.get(2).asDouble();
+                    if (reply.get(0).asVocab()==Vocab::encode("ack"))
+                    {
+                        location.resize(3);
+                        location[0]=reply.get(1).asDouble();
+                        location[1]=reply.get(2).asDouble();
+                        location[2]=reply.get(3).asDouble();
 
-                    // compute ball position in robot's root frame
-                    Matrix T=zeros(4,4);
-                    T(0,1)=-1.0;
-                    T(1,2)=1.0;  T(1,3)=0.5976;
-                    T(2,0)=-1.0; T(2,3)=-0.026;
-                    T(3,3)=1.0;
-                    location.push_back(1.0);
-                    location=SE3inv(T)*location;
-                    location.pop_back();
-                    location[2]+=0.05;  // safe margin
-                    return true;
+                        // compute ball position in robot's root frame
+                        location[2]-=0.63;
+
+                        // apply some safe margin
+                        location[2]+=0.05;
+                        return true;
+                    }
                 }
             }
         }

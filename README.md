@@ -28,24 +28,16 @@ being the code capable of dealing with object location retrieval in both conditi
 
 The outcome should look like the animation below with the simulator:
 
-![grasp-it](/assets/grasp-it.gif)
-
-<details>
-<summary>Click to watch a better grasp 👌</summary>
-
-Well, it comes out that grasping a rigid sphere in a simulated environment
-is not that easy :blush: since dynamics rules here.
-Anyway, the same code running on the real robot should perform way better,
-as for example in the video below:
-
-[![real-robot](/assets/real-robot.png)](https://www.youtube.com/watch?v=rITQlGuXXOw)
-
-</details>
+<p align="center">
+  <img src="/assets/grasp-it.gif"/>
+</p>
 
 ---
-Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/helpers.h#L22)), so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE` in the [**`src/main.cpp`**](./src/main.cpp) module.
 
-:warning: Don't speed up the movements by reducing the trajectory time of the operational controllers: they're already all set to work with the real robot.
+Some of the points reported above have been already addressed in the code (e.g. [**object detection and location retrieval**](./src/helpers.h#L24)),
+so you need to **fill in the missing gaps** highlighted by the comment `// FILL IN THE CODE` in the [**`src/main.cpp`**](./src/main.cpp) module.
+
+⚠ Don't speed up the movements by reducing the trajectory time of the operational controllers: they're already all set to work with the real robot.
 
 Once done, you can test your code in two ways along with the simulator:
 
@@ -55,27 +47,6 @@ Once done, you can test your code in two ways along with the simulator:
     1. When you reply to rpc commands, we assume the robot has **finished the movement**.
     1. The smoke-test will add a random displacement to the initial position of the ball in order to force the use of both hands :wink:
 
-If you pass the test on the simulator, :clock3: **book the robot** :robot: to get a real experience!
-
-<details>
-<summary>🔵 Click to know how to make the blue ball show up in the simulator</summary>
-    
-- To make the blue ball show up within the simulator, you have to turn on the
-flag **RENDER::objects** in the [**`iCub_parts_activation.ini`**](https://github.com/robotology/icub-main/blob/master/app/simConfig/conf/iCub_parts_activation.ini#L28) file.
-
-    To do so, follow these steps (the **smoke-test** does them for you):
-    ```sh
-    # import the file for customization
-    $ yarp-config context --import simConfig iCub_parts_activation.ini
-
-    # open the file
-    $ gedit ~/.local/share/yarp/contexts/simConfig/iCub_parts_activation.ini
-    ```
-    Now, edit the file by setting the option **objects** equal to **on** (under the group _RENDER_).
-
-    Also, you might find this [**resource**](https://github.com/robotology/QA/issues/42) quite useful to get accustomed to configuration files in Yarp :smiley:
-- Alternatively, you can use this [**model**](https://github.com/robotology-playground/icub-gazebo-wholebody/tree/master/worlds/iCub_and_Table) within **Gazebo**. Be careful, the **smoke-test** does work only with iCub_SIM.
-
-</details>
+If you pass the test on the simulator, 🕒 **book the robot** 🤖 to get a real experience!
 
 # [How to complete the assignment](https://github.com/vvv-school/vvv-school.github.io/blob/master/instructions/how-to-complete-assignments.md)
