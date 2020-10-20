@@ -43,7 +43,7 @@ Once done, you can test your code in two ways along with the simulator:
 
 1. **Manually**: running the _yarpmanager scripts_ provided from within [**app/scripts**](./app/scripts) and yielding corresponding commands to the _module rpc port_.
 1. **Automatically**: [running the script **test.sh**](https://github.com/vvv-school/vvv-school.github.io/blob/master/instructions/how-to-run-smoke-tests.md) in the **smoke-test** directory. Take into account these important points:
-    1. We use a **timeout of _240 s_** to check the status of rpc communication, meaning that you have _240 s_ max to accomplish each rpc command.
+    1. We use a **timeout of _240 seconds_** to check the status of rpc communication, meaning that you have _240 seconds_ max to accomplish each rpc command.
     1. When you reply to rpc commands, we assume the robot has **finished the movement**.
     1. The smoke-test will add a random displacement to the initial position of the ball in order to force the use of both hands :wink:
 
