@@ -308,7 +308,7 @@ public:
         string cmd=command.get(0).asString();
         if (cmd=="help")
         {
-            reply.addVocab(Vocab::encode("many"));
+            reply.addVocab32("many");
             reply.addString("Available commands:");
             reply.addString("- look_down");
             reply.addString("- grasp_it");
@@ -331,7 +331,7 @@ public:
 
             // we can pass a new value via rpc
             if (command.size()>1)
-                fingers_closure=command.get(1).asDouble();
+                fingers_closure=command.get(1).asFloat64();
 
             bool ok=grasp_it(fingers_closure);
             // we assume the robot is not moving now
