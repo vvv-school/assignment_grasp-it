@@ -48,7 +48,7 @@ class WorldHandler : public gazebo::WorldPlugin
                 std::lock_guard<std::mutex> lck(hdl->mtx);
                 if (cmd.get(0).asVocab32() == yarp::os::Vocab32::encode("get")) {
                     const auto& p = hdl->cur_pose.Pos();
-                    rep.addVocab32(("ack");
+                    rep.addVocab32("ack");
                     rep.addFloat64(p.X());
                     rep.addFloat64(p.Y());
                     rep.addFloat64(p.Z());
